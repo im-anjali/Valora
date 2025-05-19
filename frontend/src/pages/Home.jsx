@@ -54,16 +54,11 @@ export default function Home() {
           ))}
         </div>
         <div className="uti-container">
-           <div className="utilities">
           {
           utilities.map((uti) => (
              <Utilities key={uti.path} item={uti} />
             ))
           }
-        </div>
-        <div className="photo">
-          <img src="/homepage.png"/>
-        </div>
         </div>
          <HomeMap/>
        <footer className="home-footer">

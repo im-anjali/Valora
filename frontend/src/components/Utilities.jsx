@@ -7,9 +7,9 @@ export default function Utilities({item}){
     return(<>
     <Link to = {item.path} className="utility-card">
     <div className="uti-content">
-        <FontAwesomeIcon icon={item.icon} className="uti-icon"  />
-        <p className="uti-name">{item.names}</p>
-        <FontAwesomeIcon icon={faArrowRight} className="uti-icon"/> </div>
+        <div className="part-one"><FontAwesomeIcon icon={item.icon} className="uti-icon1" />
+        <p className="uti-name">{item.names}</p></div>
+        <FontAwesomeIcon icon={faArrowRight} className="uti-icon2"/></div>
     </Link>
         </>)
 }
