@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { faHome, faAddressCard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link, useLocation } from "react-router-dom";
+import { Link} from "react-router-dom";
 import "../styles/_navbar.scss";
 import { faClipboardUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function Navbar() {
-  const location = useLocation();
   const links = [
     {
       name: "Home",
