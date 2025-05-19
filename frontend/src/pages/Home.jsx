@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouseMedical, faBuildingShield, faFireExtinguisher } from "@fortawesome/free-solid-svg-icons";
 import KeyCard from "../components/KeyCard";
 import Utilities from "../components/Utilities";
+import HomeMap from "../components/HomeMap";
 export default function Home() {
   const services = [
     {
@@ -55,8 +56,8 @@ export default function Home() {
         <div className="uti-container">
            <div className="utilities">
           {
-            utilities.map((uti)=>(
-              <Utilities item={uti}/>
+          utilities.map((uti) => (
+             <Utilities key={uti.path} item={uti} />
             ))
           }
         </div>
@@ -64,6 +65,7 @@ export default function Home() {
           <img src="/homepage.png"/>
         </div>
         </div>
+         <HomeMap/>
        <footer className="home-footer">
         <div className="sos-button-container">
               <button className="sos-button">

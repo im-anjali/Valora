@@ -5,7 +5,7 @@
   gap: 2rem;
   padding: 2rem;
   background: white;
-  margin-top: -0.5rem;
+  margin-top: -1rem;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
@@ -22,7 +22,7 @@
   border: 3px solid #c0c0e0;
   border-radius: 1.5rem;
   height: 200px;
-  width: 250px;
+  width: 310px;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -41,8 +41,8 @@
 .key-image {
     border: none;
     border-radius: 0.5rem;
-    height: 4.5rem;
-    width: 4.5rem;
+    height: 5em;
+    width: 5rem;
     margin-bottom: 1rem;
   }
 
@@ -58,6 +58,7 @@
   justify-content: space-evenly;
   align-items: flex-start;
   gap: 1rem;
+  margin-top: -1rem;
 }
 
 //utilities
@@ -66,12 +67,12 @@
    border: 3px solid #c0c0e0;
    background-color: #ebebf8;
   height: 80px;
-  width: 100%;
+  width: 120%;
   display: flex;
   margin-bottom: 1.5rem;
   text-decoration: none;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 
 .photo {
@@ -79,7 +80,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .photo img{
@@ -94,7 +96,8 @@
   flex: 1;
 }
 .uti-content{
-  display: inline-flex;
+  display: flex;
+  justify-content: space-evenly;
   margin-left: 1rem;
   gap: 1rem;
   align-items: center;
@@ -162,9 +165,10 @@
   border-radius: 50%;
 }
 
-.sos-label {
-  font-size: 12px;
-  color: white;
-  font-weight: bold;
-  margin-top: -2px;
+
+.map-container {
+  padding: 0rem;
+  height: 600px;
+  width: 100vw;
 }
+
