@@ -9,7 +9,7 @@ import Signup from "./pages/Signup";
 export default function App() {
   return (
     <>
-      {/* <Navbar /> */}
+     <Navbar/>
       {/* <div className="container main"> */}
         <Routes>
           <Route path="/" element={<Home />} />
