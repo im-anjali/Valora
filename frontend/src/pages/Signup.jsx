@@ -55,7 +55,7 @@ const Signup = () => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="Enter your full name"
-                                    className="w-full pl-3 pr-3 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-puple focus:border-black"
+                                    className="w-full pl-3 pr-3 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-puple-900 focus:border-black"
                                     required
                                 />
                             </div>
@@ -75,7 +75,7 @@ const Signup = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter your email"
-                                    className="w-full pl-3 pr-3 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-purple"
+                                    className="w-full pl-3 pr-3 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-800 focus:border-purple"
                                     required
                                 />
                             </div>

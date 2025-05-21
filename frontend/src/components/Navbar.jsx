@@ -11,7 +11,7 @@ export default function Navbar() {
   ];
 
   return (
-    <div className="h-[60px] bg-[#b5b5f0] mb-4 text-black flex items-center justify-between rounded-md pl-4 gap-8">
+    <div className="h-[60px] bg-[#b5b5f0] text-black flex items-center justify-between rounded-md pl-4 gap-8">
       <div className="flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2 text-[1.5em] font-bold text-[#1e3a8a] no-underline drop-shadow-sm">
         <img
