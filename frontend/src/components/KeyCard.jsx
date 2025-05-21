@@ -12,7 +12,7 @@ export default function KeyCard({ item }) {
       <img
         src={item.img}
         alt={item.name}
-        className="h-19 w-19 sm:h-20 sm:w-20 mb-2 object-contain mt-2"
+        className="h-20 w-20 sm:h-20 sm:w-20 mb-2 object-contain mt-1"
       />
       <p className="text-base sm:text-lg md:text-2xl font-bold text-[#2c2c57] text-center px-2">
         {item.name}
