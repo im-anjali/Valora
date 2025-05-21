@@ -29,16 +29,16 @@ p.content {
   z-index: 1;
 }
 
-img {
-  width: 40%; /* Make image scale with container */
-  height: auto; /* Allow image height to adjust naturally */
-  max-height: 400px; /* Optional: limit maximum height */
-  border-radius: 1.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  object-fit: cover;
-  border: 3px solid #c0c0e0;
-}
+// img {
+//   width: 40%; /* Make image scale with container */
+//   height: auto; /* Allow image height to adjust naturally */
+//   max-height: 400px; /* Optional: limit maximum height */
+//   border-radius: 1.5rem;
+//   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+//   z-index: 1;
+//   object-fit: cover;
+//   border: 3px solid #c0c0e0;
+// }
 
 //footer
 .footer {

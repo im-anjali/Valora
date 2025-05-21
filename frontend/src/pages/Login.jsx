@@ -1,0 +1,125 @@
+import React, { useState, useRef } from "react";
+import { Eye, EyeOff, Mail, Lock, ArrowRight, X } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
+const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+
+
+
+
+
+
+    return (
+        <div className="flex h-screen">
+
+            {/* Left Section - Introduction */}
+            <div className="hidden lg:flex lg:w-1/2  flex-col justify-center items-center p-10">
+                <div className="max-w-md text-center">
+                    {/* <p className="text-xl font-light mb-8 text-gray-800">
+                        A community-driven personalized learning platform
+                    </p> */}
+                    <div className="flex justify-center mb-8">
+                        <img src="/public/login.png" alt="login" className="" />
+                    </div>
+                    {/* <p className="text-lg mb-10 text-gray-800">
+                        Join our community to access a wealth of knowledge and personalized
+                        learning experiences.
+                    </p> */}
+                </div>
+            </div>
+
+            {/* Right Section - Login Form */}
+
+            <div className="w-full lg:w-1/2 flex justify-center items-center p-10 bg-purple-200">
+
+                <div className="w-full max-w-md bg-white rounded-xl p-8 shadow-lg">
+                    <div className="text-center mb-8">
+                        <h3 className="text-3xl font-bold text-black mb-3">
+                            Sign in
+                        </h3>
+                    </div>
+                    <form className="space-y-6">
+                        <div className="space-y-2">
+                            <label
+                                htmlFor="email"
+                                className="block text-sm font-medium text-gray-800"
+                            >
+                                Email Address
+                            </label>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                </div>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Enter your email"
+                                    className="w-full pl-3 pr-3 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                                <label
+                                    htmlFor="password"
+                                    className="block text-sm font-medium text-gray-800"
+                                >
+                                    Password
+                                </label>
+
+                            </div>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                </div>
+                                <input
+                                    id="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Enter your password"
+                                    className="w-full pl-3 pr-10 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                    required
+                                />
+                               
+                            </div>
+                        </div>
+                        <div>
+                            <button
+                                type="submit"
+                                className="w-full bg-purple-900 text-white py-3 rounded-lg hover:bg-purple-800 transition duration-300"
+                            >
+                                Sign In
+                            </button>
+                        </div>
+
+
+                        <div className="text-center mt-6">
+                            <p className="text-gray-800">
+                                Don't have an account?{" "}
+                                <Link
+                                    to="/signup"
+                                    className="text-black hover:text-gray-600 font-medium"
+                                >
+                                    Sign up
+                                </Link>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+    );
+};
+
+export default Login;
