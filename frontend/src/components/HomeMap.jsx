@@ -12,8 +12,12 @@ export default function HomeMap() {
   }
 
   return (
-    <div className="map-container" >
-      <GoogleMap center={center} zoom={15} mapContainerStyle={{ width: "100%", height: "100%", border:"1px solid black", borderradius:"0.5rem" }} />
+    <div className="w-screen h-[600px] border border-black rounded-md">
+      <GoogleMap
+        center={center}
+        zoom={15}
+        mapContainerStyle={{ width: "100%", height: "100%" }}
+      />
     </div>
   );
 }
