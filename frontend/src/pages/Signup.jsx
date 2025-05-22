@@ -1,7 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Eye, EyeOff, Mail, Lock, ArrowRight, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 
 const Signup = () => {
     const [name, setName] = useState("");

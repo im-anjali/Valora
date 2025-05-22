@@ -1,8 +1,6 @@
 import React, { useState, useRef } from "react";
-import { Eye, EyeOff, Mail, Lock, ArrowRight, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-
+import Navbar from "../components/Navbar";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,25 +12,20 @@ const Login = () => {
 
 
     return (
+        <>
+        
         <div className="flex h-screen">
-
-            {/* Left Section - Introduction */}
+           
             <div className="hidden lg:flex lg:w-1/2  flex-col justify-center items-center p-10">
                 <div className="max-w-md text-center">
-                    {/* <p className="text-xl font-light mb-8 text-gray-800">
-                        A community-driven personalized learning platform
-                    </p> */}
+                    
                     <div className="flex justify-center mb-8">
                         <img src="/public/login.png" alt="login" className="" />
                     </div>
-                    {/* <p className="text-lg mb-10 text-gray-800">
-                        Join our community to access a wealth of knowledge and personalized
-                        learning experiences.
-                    </p> */}
+                    
                 </div>
             </div>
 
-            {/* Right Section - Login Form */}
 
             <div className="w-full lg:w-1/2 flex justify-center items-center p-10 bg-purple-200">
 
@@ -119,6 +112,7 @@ const Login = () => {
 
 
         </div>
+        </>
     );
 };
 
