@@ -29,8 +29,7 @@ export default function Home() {
     </div>
     
       {/* Map */}
-      <p className="text-2xl font-bold text-[#2c2c57] mb-2 flex pl-6">Know Your City..</p>
-      <HomeMap />
+      <HomeMap/>
       {/* Footer with Floating SOS Button */}
       <footer className="fixed bottom-0 left-0 w-full h-13 bg-[#ebebf8] flex justify-center items-center z-10 border-t border-[#f2c0c0] pb-safe-area-inset-bottom fixed">
         <div className="absolute top-[-40px] left-1/2 transform -translate-x-1/2 z-20">

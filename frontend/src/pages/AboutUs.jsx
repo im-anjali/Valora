@@ -60,7 +60,7 @@ function NeedSection() {
 
   return (
     <>
-      <h2 className="text-4xl font-bold text-blue-900 mb-4 z-10 mt-8 ml-2 text-left">What highlights the need of Valora?</h2>
+      <h2 className="text-4xl font-bold text-blue-900 mb-4 z-10 mt-8 ml-22 text-left">What highlights the need of Valora?</h2>
       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 p-8 bg-gradient-to-br from-gray-100 to-indigo-100 mt-8 border-[3px] border-indigo-200 rounded-2xl w-[100%]">
         {needs.map((need, index) => (
           <NeedCard key={index} need={need} />

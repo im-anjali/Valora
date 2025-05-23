@@ -1,23 +1,29 @@
-import { useJsApiLoader, GoogleMap } from "@react-google-maps/api";
+import { MapContainer, TileLayer } from "react-leaflet";
+import { useRef, useState } from "react";
+import "leaflet/dist/leaflet.css"; // ensure this is imported
 
-const center = { lat: 18.507982, lng: 73.816941 };
+import osm from "./osm-providers"; 
 
 export default function HomeMap() {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: import.meta.env.VITE_MAPS_APIKEY, 
-  });
-
-  if (!isLoaded) {
-    return <p>The map is loading...</p>;
-  }
+  const [center] = useState({ lat: 18.506811, lng: 73.817753 });
+  const zoom_level = 40;
+  const mapRef = useRef();
 
   return (
-    <div className="w-screen h-[600px] border border-black rounded-md">
-      <GoogleMap
-        center={center}
-        zoom={15}
-        mapContainerStyle={{ width: "100%", height: "100%" }}
-      />
-    </div>
+    <>
+      <h2 className="text-center text-xl font-bold mb-4">Know Your City...</h2>
+      <div className="h-[600px] w-full  mb-20 lg:w-6/7 mx-auto relative z-0 rounded-2xl overflow-hidden shadow-md">
+    <MapContainer
+    center={center}
+    zoom={zoom_level}
+    ref={mapRef}
+    className="h-full w-full"
+    scrollWheelZoom={true}
+  >
+    <TileLayer url={osm.maptiler.url} attribution={osm.maptiler.attribution} />
+  </MapContainer>
+</div>
+
+    </>
   );
 }

@@ -35,8 +35,8 @@ export default function Navbar() {
               <img
                 alt="Valora"
                 src="/logo.png"
-                className="h-8 w-8 rounded-full object-cover"
-              /> <h1 className='text-black ml-3 cursor-pointer'onClick={navigateHome}>Valora</h1>
+                className="h-10 w-10 rounded-full object-cover"
+              /> <h1 className='text-black text-xl ml-3 cursor-pointer'onClick={navigateHome}>Valora</h1>
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
