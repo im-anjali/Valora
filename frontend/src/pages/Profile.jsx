@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Pencil } from 'lucide-react';
 import axios from 'axios';
 import {
   Mail, Phone, MapPin, Calendar
 } from 'lucide-react';
 import { AuthContext } from '../context/UserContext';
+import { useNavigate } from 'react-router';
 
 export default function ProfilePage() {
   const [user, setUser] = useState({});
   const [loaded, setLoaded] = useState(false);
   const { currUser } = useContext(AuthContext);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -31,7 +34,9 @@ export default function ProfilePage() {
     };
     fetchDetails();
   }, []);
-
+ const updatepage = () =>{
+   navigate("/updateuser")
+ }
   const avatarLetter = user.username?.charAt(0)?.toUpperCase() || "?";
 
   return (
@@ -71,15 +76,24 @@ export default function ProfilePage() {
               </h1>
               <p className="text-gray-700 mt-1">Profile Overview</p>
             </div>
+            <button
+              className="ml-auto bg-white hover:bg-purple-100 cursor-pointer text-purple-600 border border-purple-400 px-4 py-2 rounded-half flex items-center gap-2 transition duration-300 ease-in-out shadow-sm"
+              onClick={updatepage}
+            >
+              <Pencil size={18} />
+              <span className="text-sm font-medium" >Edit</span>
+            </button>
           </div>
+
 
           <div className="px-8 py-8 space-y-6">
             <h2
-              className={`text-2xl font-semibold text-center
+              className={`text-2xl font-semibold text-left
                 transition-opacity duration-500 ease-in-out
                 ${loaded ? 'opacity-100' : 'opacity-0'}`}
             >
-              Personal Information
+              User Details
+
             </h2>
 
             <div className="space-y-4">

@@ -5,7 +5,7 @@ require('dotenv').config();
 const userRoutes = require("./routes/userRoutes");
 const client = require('./connectDB/connectDb');
 app.use(cors({
-    origin: 'http://localhost:5174',  // Replace with the URL of your React frontend
+    origin: 'http://localhost:5173',  // Replace with the URL of your React frontend
     credentials: true,                // Allow credentials such as cookies
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization']  // Allow specific headers

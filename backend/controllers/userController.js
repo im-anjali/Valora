@@ -73,4 +73,24 @@ const profile = async(req, res) => {
         throw(error);
     }
 }
-module.exports = {login, signup, profile};
+const updateProfile = async (req, res) => {
+  const { username, email, contact } = req.body;
+  const userId = req.userId;
+
+  try {
+    const updateUser = await client.query(
+      'UPDATE users SET username = $1, email = $2, contact = $3 WHERE id = $4',
+      [username, email, contact, userId]
+    );
+
+    res.status(200).json({
+      message: "Details updated",
+      updateUser,
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+module.exports = {login, signup, profile, updateProfile};

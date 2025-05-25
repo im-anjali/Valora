@@ -17,6 +17,11 @@ export default function Navbar() {
     const navigateHome = () =>{
         navigate("/");
 }
+  const logout = () =>{
+    localStorage.removeItem("token");
+    navigate("/login")
+  }
+
   return (
     <Disclosure as="nav" className="bg-[#b5b5f0]">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -89,7 +94,7 @@ export default function Navbar() {
                     Your Profile
                   </a>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={logout} > 
                   <a
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
@@ -97,7 +102,7 @@ export default function Navbar() {
                     Settings
                   </a>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem >
                   <a
                     href="#"
                     className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"

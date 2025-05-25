@@ -1,23 +1,46 @@
-import React from 'react'
-import { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react';
+
 export const AuthContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [currUser, setcurrUser] = useState(null);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    setcurrUser(userData);
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        setcurrUser(userData);
+      } catch (err) {
+        console.error("Invalid JSON in localStorage for 'user'", err);
+        localStorage.removeItem("user"); // Clean up corrupted data
+        setcurrUser(null);
+      }
+    }
   }, []);
 
   const update = (data) => {
     setcurrUser(data);
-    localStorage.setItem("user", JSON.stringify(data));
+
+    if (data) {
+      try {
+        localStorage.setItem("user", JSON.stringify(data));
+      } catch (err) {
+        console.error("Failed to save user to localStorage", err);
+      }
+    } else {
+      localStorage.removeItem("user");
+    }
   };
 
   useEffect(() => {
     if (currUser) {
-      localStorage.setItem("user", JSON.stringify(currUser));
+      try {
+        localStorage.setItem("user", JSON.stringify(currUser));
+      } catch (err) {
+        console.error("Failed to save user to localStorage", err);
+      }
     } else {
       localStorage.removeItem("user");
     }
@@ -31,5 +54,3 @@ const UserProvider = ({ children }) => {
 };
 
 export default UserProvider;
-
-
