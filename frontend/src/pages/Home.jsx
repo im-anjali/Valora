@@ -13,12 +13,6 @@ export default function Home() {
     { name: "Hospital Near Me", img:"/hospitals.svg", path: "/hospital"}
   ];
 
-  const utilities = [
-    { icon: faHouseMedical, names: "Hospital near me", path: "/hospitals" },
-    { icon: faFireExtinguisher, names: "Fire emergency", path: "/firestation" },
-    { icon: faBuildingShield, names: "Police Station near me", path: "/policestations" },
-  ];
-
   return (
     <div className="bg-white pt-8 mt-2">
     {/* Services Grid */}
