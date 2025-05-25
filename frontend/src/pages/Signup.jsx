@@ -1,12 +1,26 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import axios from 'axios';
 const Signup = () => {
-    const [name, setName] = useState("");
+    const [username, setuserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+        const [error, setError] = useState('');
+    const [contact, setContact] = useState('');
+    const navigate = useNavigate();
 
-
+    const handleSubmit = async(e) =>{
+        e.preventDefault();
+        try {
+            console.log(username, email, password)
+const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, {
+  username, email, password, contact
+});
+navigate("/")
+        } catch (error) {
+            setError(error.response.data.message);
+        }
+    }
 
 
 
@@ -34,7 +48,7 @@ const Signup = () => {
                             Sign Up
                         </h3>
                     </div>
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="space-y-2">
                             <label
                                 htmlFor="name"
@@ -50,8 +64,8 @@ const Signup = () => {
                                 <input
                                     id="name"
                                     type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={username}
+                                    onChange={(e) => setuserName(e.target.value)}
                                     placeholder="Enter your full name"
                                     className="w-full pl-3 pr-3 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-puple-900 focus:border-black"
                                     required
@@ -78,6 +92,28 @@ const Signup = () => {
                                 />
                             </div>
                             <div className="space-y-2">
+                                    <div className="flex justify-between items-center">
+                                <label
+                                    htmlFor="password"
+                                    className="block text-sm font-medium text-gray-800"
+                                >
+                                    Contact Information
+                                </label>
+
+                            </div>
+                            <div className="relative">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                </div>
+                                <input
+                                    id="contact"
+                                    value={contact}
+                                    onChange={(e) => setContact(e.target.value)}
+                                    placeholder="Enter Contact Number"
+                                    className="w-full pl-3 pr-10 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                    required
+                                />
+                              
+                            </div>
                             <div className="flex justify-between items-center">
                                 <label
                                     htmlFor="password"

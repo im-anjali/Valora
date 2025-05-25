@@ -1,11 +1,37 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+// import UserContext from "../context/UserContext"
+import {AuthContext} from "../context/UserContext";
+import axios from "axios"
+import { useContext } from "react";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const {currUser, update} = useContext(AuthContext);
+    const navigate = useNavigate();
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`,{email, password}, {withCredentials:true});
+            const token = res.data.token;
+            if(token){
+                   localStorage.setItem("token", token);
+            }else{
+                console.log("no token found");
+            }
+            const user = {
+                ...res.data.user,
+                token:res.data.token,
 
+            }
 
+            update(user);
+            console.log(user);
+            navigate("/");
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 
@@ -35,7 +61,7 @@ const Login = () => {
                             Sign in
                         </h3>
                     </div>
-                    <form className="space-y-6">
+                    <form className="space-y-6"onSubmit={handleSubmit}>
                         <div className="space-y-2">
                             <label
                                 htmlFor="email"
