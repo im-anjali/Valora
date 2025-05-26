@@ -3,6 +3,7 @@ const app = express();
 const cors =  require ('cors');
 require('dotenv').config();
 const userRoutes = require("./routes/userRoutes");
+const zoneRoutes = require("./routes/zoneRoutes"); 
 const client = require('./connectDB/connectDb');
 app.use(cors({
     origin: 'http://localhost:5173',  // Replace with the URL of your React frontend
@@ -16,7 +17,7 @@ app.get("/", (req, res) =>{
     res.send("hello world");
 })
 app.use('/user', userRoutes);
-
+app.use('/api/zones', zoneRoutes);  
 app.listen(PORT, (req, res) =>{
     console.log(`Server running on port http://localhost:${PORT}`)
 });
