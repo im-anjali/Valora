@@ -1,118 +1,131 @@
-import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
-import { useRef, useState, useEffect } from "react";
-import osm from "./osm-providers";
-import "leaflet-routing-machine";
-import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet-control-geocoder";
-
-
-// Custom marker icon
-const markericon = new L.Icon({
-  iconUrl: "/marker.png",
-  iconSize: [45, 45],
-  iconAnchor: [17, 45],
-  popupAnchor: [3, -46],
-});
-
-// Component to handle routing
-const Routing = ({ start, end }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!map || !start || !end) return;
-
-    const routingControl = L.Routing.control({
-      waypoints: [
-        L.latLng(start.lat, start.lng),
-        L.latLng(end.lat, end.lng),
-      ],
-      routeWhileDragging: true,
-      addWaypoints: true,
-      draggableWaypoints: false,
-      fitSelectedRoutes: true,
-      showAlternatives: false,
-    }).addTo(map);
-
-    return () => {
-      map.removeControl(routingControl);
-    };
-  }, [map, start, end]);
-
-  return null;
-};
-
+import "leaflet-routing-machine";
 
 export default function SafeMap() {
-  const defaultCenter = { lat: 18.506811, lng: 73.817753 };
-  const zoom_level = 13;
+  const mapRef = useRef(null);
+  const routingControlRef = useRef(null);
+  const userLocationRef = useRef(null);
+  const [destination, setDestination] = useState("");
 
-  const [start, setStart] = useState(null);
-  const [end, setEnd] = useState(null);
+  useEffect(() => {
+    const map = L.map("map").setView([18.5074, 73.8077], 13);
+    mapRef.current = map;
 
-  const [startInput, setStartInput] = useState("");
-  const [endInput, setEndInput] = useState("");
+    L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
+    }).addTo(map);
 
-  const handleSetRoute = () => {
-    const [startLat, startLng] = startInput.split(",").map(Number);
-    const [endLat, endLng] = endInput.split(",").map(Number);
+    map.locate({ setView: true, maxZoom: 16 });
 
-    if (
-      !isNaN(startLat) &&
-      !isNaN(startLng) &&
-      !isNaN(endLat) &&
-      !isNaN(endLng)
-    ) {
-      setStart({ lat: startLat, lng: startLng });
-      setEnd({ lat: endLat, lng: endLng });
-    } else {
-      alert("Please enter valid coordinates");
+    map.on("locationfound", function (e) {
+      L.marker(e.latlng).addTo(map).bindPopup("You are here").openPopup();
+      userLocationRef.current = e.latlng;
+    });
+
+    map.on("locationerror", function () {
+      alert("Unable to access your location.");
+    });
+
+    return () => {
+      map.remove();
+    };
+  }, []);
+
+  // Function to get coordinates from text and route
+  const handleDestinationSearch = async () => {
+    if (!destination) return alert("Please enter a destination");
+
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(destination)}`
+      );
+      const results = await response.json();
+
+      if (results.length === 0) {
+        alert("Location not found");
+        return;
+      }
+
+      const destCoords = {
+        lat: parseFloat(results[0].lat),
+        lng: parseFloat(results[0].lon),
+      };
+
+      // Clear previous route if any
+      if (routingControlRef.current && mapRef.current) {
+        mapRef.current.removeControl(routingControlRef.current);
+      }
+
+      if (userLocationRef.current && mapRef.current) {
+        routingControlRef.current = L.Routing.control({
+          waypoints: [
+            L.latLng(userLocationRef.current.lat, userLocationRef.current.lng),
+            L.latLng(destCoords.lat, destCoords.lng),
+          ],
+          routeWhileDragging: false,
+          show: false,
+          addWaypoints: false,
+        }).addTo(mapRef.current);
+      }
+    } catch (error) {
+      console.error("Geocoding error:", error);
+      alert("Failed to find destination");
     }
   };
 
   return (
-    <>
-      <h2 className="text-center text-xl font-bold mb-4">Know Your City...</h2>
-      <div className="flex justify-center gap-4 mb-4">
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        margin: 0,
+        padding: 0,
+      }}
+    >
+      <div style={{ padding: "10px", zIndex: 1000 }}>
         <input
           type="text"
-          value={startInput}
-          onChange={(e) => setStartInput(e.target.value)}
-          placeholder="Start (lat,lng)"
-          className="border px-2 py-1 rounded"
-        />
-        <input
-          type="text"
-          value={endInput}
-          onChange={(e) => setEndInput(e.target.value)}
-          placeholder="End (lat,lng)"
-          className="border px-2 py-1 rounded"
+          placeholder="Enter destination"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+          style={{
+            padding: "10px",
+            fontSize: "16px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            marginRight: "10px",
+            width: "300px",
+          }}
         />
         <button
-          onClick={handleSetRoute}
-          className="bg-indigo-300 text-black px-4 py-1 rounded hover:blue-500"
+          onClick={handleDestinationSearch}
+          style={{
+            padding: "10px 16px",
+            fontSize: "16px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
         >
-          Show Route
+         Route Me
         </button>
       </div>
-
-      <div className="h-[600px] w-full mb-20 lg:w-6/7 mx-auto relative z-0 rounded-2xl overflow-hidden shadow-md">
-        <MapContainer
-          center={defaultCenter}
-          zoom={zoom_level}
-          className="h-full w-full"
-          scrollWheelZoom={true}
-        >
-          <TileLayer
-            url={osm.maptiler.url}
-            attribution={osm.maptiler.attribution}
-          />
-          {start && <Marker position={start} icon={markericon} />}
-          {end && <Marker position={end} icon={markericon} />}
-          {start && end && <Routing start={start} end={end} />}
-        </MapContainer>
-      </div>
-    </>
+      <div
+        id="map"
+        style={{
+          width: "80%",
+          height: "80vh",
+          boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+          borderRadius: "12px",
+        }}
+      ></div>
+    </div>
   );
 }

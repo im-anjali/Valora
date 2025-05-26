@@ -1,88 +1,104 @@
-import { MapContainer, Marker, TileLayer, Popup } from "react-leaflet";
-import { useRef, useState } from "react";
-import "leaflet/dist/leaflet.css";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
-import osm from "./osm-providers";
-import useGeoLocation from "./useGeoLocation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
-
-// Custom marker icon
-const markericon = new L.Icon({
-  iconUrl: "/marker.png",
-  iconSize: [45, 45],
-  iconAnchor: [17, 45],
-  popupAnchor: [3, -46],
-});
+import "leaflet/dist/leaflet.css";
 
 export default function ZoneMap() {
-  const defaultCenter = { lat: 18.506811, lng: 73.817753 };
-  const zoom_level = 14;
-  const mapRef = useRef(null);
-  const location = useGeoLocation();
+  const mapRef = useRef(null); // Div reference
+  const leafletMap = useRef(null); // Map instance reference
+  const markerRef = useRef(null); // Store user location marker
 
-  const center =
-    location.loaded && !location.error
-      ? {
-          lat: location.coordinates.lat,
-          lng: location.coordinates.lng,
+  useEffect(() => {
+    if (!leafletMap.current && mapRef.current) {
+      const map = L.map(mapRef.current).setView([18.5074, 73.8077], 13);
+
+      L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(map);
+
+      // Event handler for successful location
+      map.on("locationfound", (e) => {
+        const radius = e.accuracy;
+
+        // Remove old marker if any
+        if (markerRef.current) {
+          map.removeLayer(markerRef.current);
         }
-      : defaultCenter;
 
-  const showMyLocation = () => {
-    if (location.loaded && !location.error && mapRef.current) {
-      mapRef.current.flyTo(
-        [location.coordinates.lat, location.coordinates.lng],
-        zoom_level,
-        { animate: true }
-      );
-    } else {
-      alert(location.error?.message || "Location not available.");
+        const marker = L.marker(e.latlng).addTo(map);
+        marker.bindPopup(`You are within ${Math.round(radius)} meters.`).openPopup();
+
+        // Optional circle to show accuracy radius
+        L.circle(e.latlng, radius).addTo(map);
+
+        markerRef.current = marker;
+        map.setView(e.latlng, 15);
+      });
+
+      // Handle location errors
+      map.on("locationerror", (e) => {
+        alert("Location access denied or unavailable.");
+      });
+
+      leafletMap.current = map;
+    }
+
+    return () => {
+      if (leafletMap.current) {
+        leafletMap.current.remove();
+        leafletMap.current = null;
+      }
+    };
+  }, []);
+
+  // Function to locate user on button click
+  const locateUser = () => {
+    if (leafletMap.current) {
+      leafletMap.current.locate({ setView: false, maxZoom: 16 });
     }
   };
 
   return (
-    <>
-      <div className="relative mb-8 w-full lg:w-4/5 mx-auto mt-[2rem]">
-        {/* Map */}
-        <div className="h-[600px] w-full rounded-2xl overflow-hidden shadow-md">
-          <MapContainer
-            center={center}
-            zoom={zoom_level}
-            whenCreated={(mapInstance) => {
-              mapRef.current = mapInstance;
-            }}
-            className="h-full w-full"
-            scrollWheelZoom={true}
-          >
-            <TileLayer
-              url={osm.maptiler.url}
-              attribution={osm.maptiler.attribution}
-            />
-            {location.loaded && !location.error && (
-              <Marker
-                position={[
-                  location.coordinates.lat,
-                  location.coordinates.lng,
-                ]}
-                icon={markericon}
-              >
-                <Popup>You are here!</Popup>
-              </Marker>
-            )}
-          </MapContainer>
-        </div>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 0,
+        padding: 0,
+      }}
+    >
+      <div
+        id="map"
+        style={{
+          width: "80%",
+          height: "80vh",
+          boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+          borderRadius: "12px",
+        }}
+      ></div>
+      <button
+  onClick={locateUser}
+  style={{
+    position: "absolute",
+    top: "15%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: 1000,
+    padding: "12px 20px",
+    backgroundColor: "#c0c0e0",
+    color: "black",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "16px",
+    cursor: "pointer",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+  }}
+>
+  📍 Locate Me
+</button>
 
-        {/* Locate Me Button */}
-        <div className="flex justify-center mt-4">
-          <button
-            onClick={showMyLocation}
-            className="bg-indigo-300 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded shadow"
-          >
-            Locate Me <FontAwesomeIcon icon={faGlobe} className="ml-2" />
-          </button>
-        </div>
-      </div>
-    </>
+    </div>
   );
 }
