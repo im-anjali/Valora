@@ -49,9 +49,9 @@ export default function ZoneMap() {
             body: JSON.stringify({
               lat: e.latlng.lat,
               lng: e.latlng.lng,
+              
             }),
           });
-
           if (!response.ok) throw new Error("Zone not found");
 
           const zone = await response.json();

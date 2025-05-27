@@ -10,10 +10,14 @@ const findZoneByLocation = async (req, res) => {
     }
 
     const query = `
-      SELECT zone, color, ST_AsGeoJSON(boundary_geom) AS boundary
-      FROM zones
-      WHERE ST_Contains(boundary_geom, ST_SetSRID(ST_Point($1, $2), 4326))
-      LIMIT 1
+    SELECT zone, color, ST_AsGeoJSON(boundary_geom) AS boundary
+    FROM zones
+    WHERE ST_Contains(
+    boundary_geom,
+    ST_SetSRID(ST_MakePoint($1, $2), 4326)
+)
+LIMIT 1;
+
     `;
 
     const result = await client.query(query, [lng, lat]);
