@@ -6,6 +6,7 @@ export default function ZoneMap() {
   const mapRef = useRef(null); // Div reference
   const leafletMap = useRef(null); // Map instance reference
   const markerRef = useRef(null); // Store user location marker
+  const zoneLayerRef = useRef(null); // Store current zone polygon layer
 
   useEffect(() => {
     if (!leafletMap.current && mapRef.current) {
@@ -16,12 +17,17 @@ export default function ZoneMap() {
       }).addTo(map);
 
       // Event handler for successful location
-      map.on("locationfound", (e) => {
+      map.on("locationfound", async (e) => {
         const radius = e.accuracy;
 
-        // Remove old marker if any
+        // Remove old user location marker if any
         if (markerRef.current) {
           map.removeLayer(markerRef.current);
+        }
+
+        // Remove old zone polygon if any
+        if (zoneLayerRef.current) {
+          map.removeLayer(zoneLayerRef.current);
         }
 
         const marker = L.marker(e.latlng).addTo(map);
@@ -32,16 +38,55 @@ export default function ZoneMap() {
 
         markerRef.current = marker;
         map.setView(e.latlng, 15);
+
+        // 👉 Call backend to get zone by lat/lng
+        try {
+          const response = await fetch("http://localhost:5000/api/zones/find-zone", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              lat: e.latlng.lat,
+              lng: e.latlng.lng,
+            }),
+          });
+
+          if (!response.ok) throw new Error("Zone not found");
+
+          const zone = await response.json();
+
+          // zone.polygon should be a GeoJSON string, parse it
+          const geojson = JSON.parse(zone.polygon);
+
+          // Draw the zone polygon with its color
+          const zoneLayer = L.geoJSON(geojson, {
+            style: {
+              color: zone.color || "blue",
+              weight: 2,
+              fillOpacity: 0.4,
+            },
+          })
+            .addTo(map)
+            .bindPopup(`You are in Zone: ${zone.zone} (${zone.color})`)
+            .openPopup();
+
+          zoneLayerRef.current = zoneLayer;
+        } catch (err) {
+          console.error("Zone fetch error:", err);
+          alert("Your location is not inside any defined zone.");
+        }
       });
 
       // Handle location errors
-      map.on("locationerror", () => {
+      map.on("locationerror", (e) => {
         alert("Location access denied or unavailable.");
       });
 
       leafletMap.current = map;
     }
 
+    // Clean up map on unmount
     return () => {
       if (leafletMap.current) {
         leafletMap.current.remove();
@@ -67,7 +112,6 @@ export default function ZoneMap() {
         alignItems: "center",
         margin: 0,
         padding: 0,
-        position: "relative",
       }}
     >
       <div
