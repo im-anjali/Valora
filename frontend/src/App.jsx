@@ -13,6 +13,7 @@ import UpdateUser from "./pages/UpdateUser";
 import ZoneInfo from "./pages/ZoneInfo";
 import SafeRoute from "./pages/SafeRoute";
 import PanicButton from "./components/PanicButton";
+import NearHosp from "./pages/NearHosp";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/updateuser" element={<UpdateUser />} />
         <Route path="/zoneinfo" element={<ZoneInfo />} />
         <Route path="/saferoute" element={<SafeRoute />} />
+        <Route path="/hospital" element={<NearHosp/>} />
       </Routes>
       <PanicButton/>
     </>
