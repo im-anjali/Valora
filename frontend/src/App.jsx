@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import UpdateUser from "./pages/UpdateUser";
 import ZoneInfo from "./pages/ZoneInfo";
 import SafeRoute from "./pages/SafeRoute";
+import PanicButton from "./components/PanicButton";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/zoneinfo" element={<ZoneInfo />} />
         <Route path="/saferoute" element={<SafeRoute />} />
       </Routes>
+      <PanicButton/>
     </>
   );
 }
