@@ -49,15 +49,16 @@ export default function ZoneMap() {
             body: JSON.stringify({
               lat: e.latlng.lat,
               lng: e.latlng.lng,
+              
             }),
           });
-
           if (!response.ok) throw new Error("Zone not found");
 
           const zone = await response.json();
 
           // zone.polygon should be a GeoJSON string, parse it
-          const geojson = JSON.parse(zone.polygon);
+          const geojson = zone.boundary; // ✅ NO NEED to parse if backend already returns JSON
+
 
           // Draw the zone polygon with its color
           const zoneLayer = L.geoJSON(geojson, {

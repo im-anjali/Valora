@@ -1,4 +1,4 @@
-const client = require('../connectDB/connectDb'); // Your PostgreSQL client connection
+const client = require('../connectDB/connectDb'); // PostgreSQL client connection
 
 // Controller function to find zone by user location
 const findZoneByLocation = async (req, res) => {
@@ -10,19 +10,27 @@ const findZoneByLocation = async (req, res) => {
     }
 
     const query = `
-      SELECT zone, color
-      FROM zones
-      WHERE ST_Contains(boundary_geom, ST_SetSRID(ST_Point($1, $2), 4326))
-      LIMIT 1
+    SELECT zone, color, ST_AsGeoJSON(boundary_geom) AS boundary
+    FROM zones
+    WHERE ST_Contains(
+    boundary_geom,
+    ST_SetSRID(ST_MakePoint($1, $2), 4326)
+)
+LIMIT 1;
+
     `;
 
-    const result = await client.query(query, [lng, lat]); // lng, lat is correct order for Point
+    const result = await client.query(query, [lng, lat]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'No zone found for this location' });
     }
 
-    res.json(result.rows[0]);
+    // Parse boundary GeoJSON string into object
+    const zone = result.rows[0];
+    zone.boundary = JSON.parse(zone.boundary);
+
+    res.json(zone);
   } catch (error) {
     console.error('Error finding zone:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -30,5 +38,6 @@ const findZoneByLocation = async (req, res) => {
 };
 
 module.exports = { findZoneByLocation };
+
 
 
