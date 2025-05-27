@@ -35,7 +35,7 @@ export default function ZoneMap() {
       });
 
       // Handle location errors
-      map.on("locationerror", (e) => {
+      map.on("locationerror", () => {
         alert("Location access denied or unavailable.");
       });
 
@@ -67,10 +67,12 @@ export default function ZoneMap() {
         alignItems: "center",
         margin: 0,
         padding: 0,
+        position: "relative",
       }}
     >
       <div
         id="map"
+        ref={mapRef}
         style={{
           width: "80%",
           height: "80vh",
@@ -79,26 +81,25 @@ export default function ZoneMap() {
         }}
       ></div>
       <button
-  onClick={locateUser}
-  style={{
-    position: "absolute",
-    top: "15%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    zIndex: 1000,
-    padding: "12px 20px",
-    backgroundColor: "#c0c0e0",
-    color: "black",
-    border: "none",
-    borderRadius: "10px",
-    fontSize: "16px",
-    cursor: "pointer",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-  }}
->
-  📍 Locate Me
-</button>
-
+        onClick={locateUser}
+        style={{
+          position: "absolute",
+          top: "15%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 1000,
+          padding: "12px 20px",
+          backgroundColor: "#c0c0e0",
+          color: "black",
+          border: "none",
+          borderRadius: "10px",
+          fontSize: "16px",
+          cursor: "pointer",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        }}
+      >
+        📍 Locate Me
+      </button>
     </div>
   );
 }
