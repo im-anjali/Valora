@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-export default function NearHosp() {
+export default function NearPolice() {
   const mapRef = useRef(null);
   const markersref = useRef({});
   const [userLocation, setUserLocation] = useState(null);
@@ -24,7 +24,7 @@ export default function NearHosp() {
       setUserLocation({ lat, lng });
 
       const hospitalIcon = L.icon({
-        iconUrl: "/hospiMarker.png",
+        iconUrl: "/policeMarker.png",
         iconSize: [35, 35],
         iconAnchor: [15, 30],
         popupAnchor: [0, -28],
@@ -36,9 +36,9 @@ export default function NearHosp() {
         .openPopup();
 
       const mockHospitals = [
-        { name: "Ruby Hall Clinic", lat: lat + 0.01, lng: lng + 0.01, distance: 1.2 },
-        { name: "Sancheti Hospital", lat: lat - 0.008, lng: lng - 0.005, distance: 1.8 },
-        { name: "Deenanath Mangeshkar Hospital", lat: lat + 0.004, lng: lng - 0.007, distance: 2.5 },
+        { name: "Ruby Hall police station", lat: lat + 0.01, lng: lng + 0.01, distance: 1.2 },
+        { name: "Sancheti police station", lat: lat - 0.008, lng: lng - 0.005, distance: 1.8 },
+        { name: "Deenanath police station", lat: lat + 0.004, lng: lng - 0.007, distance: 2.5 },
       ];
 
       setHospitals(mockHospitals);
@@ -121,7 +121,7 @@ export default function NearHosp() {
         {/* Search Bar */}
         <input
           type="text"
-          placeholder="Search hospitals..."
+          placeholder="Search police stations..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{
@@ -134,7 +134,7 @@ export default function NearHosp() {
           }}
         />
 
-        {/* Hospitals Near You List */}
+        {/* Police Near You List */}
         <div
           style={{
             flexGrow: 1,
@@ -146,7 +146,7 @@ export default function NearHosp() {
             overflowY: "auto",
           }}
         >
-          <h3 style={{ marginBottom: "15px", color: "#333", fontWeight:"bold" }}>Hospitals Near You:</h3>
+          <h3 style={{ marginBottom: "15px", color: "#333", fontWeight:"bold" }}>Police Stations Near You:</h3>
           <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
             {hospitals
               .filter((h) => h.name.toLowerCase().includes(searchQuery.toLowerCase()))

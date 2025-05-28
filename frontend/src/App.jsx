@@ -14,6 +14,7 @@ import ZoneInfo from "./pages/ZoneInfo";
 import SafeRoute from "./pages/SafeRoute";
 import PanicButton from "./components/PanicButton";
 import NearHosp from "./pages/NearHosp";
+import NearPolice from "./components/NearPolice";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/zoneinfo" element={<ZoneInfo />} />
         <Route path="/saferoute" element={<SafeRoute />} />
         <Route path="/hospital" element={<NearHosp/>} />
+        <Route path="/policestation" element={<NearPolice/>} />
       </Routes>
       <PanicButton/>
     </>
