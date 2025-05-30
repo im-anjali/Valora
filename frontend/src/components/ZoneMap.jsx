@@ -39,6 +39,12 @@ export default function ZoneMap() {
         markerRef.current = marker;
         map.setView(e.latlng, 15);
 
+        // *** Log the coordinates here ***
+        console.log("Sending coordinates to backend:", {
+          lat: e.latlng.lat,
+          lng: e.latlng.lng,
+        });
+
         // 👉 Call backend to get zone by lat/lng
         try {
           const response = await fetch("http://localhost:5000/api/zones/find-zone", {
@@ -49,7 +55,6 @@ export default function ZoneMap() {
             body: JSON.stringify({
               lat: e.latlng.lat,
               lng: e.latlng.lng,
-              
             }),
           });
           if (!response.ok) throw new Error("Zone not found");
@@ -58,7 +63,6 @@ export default function ZoneMap() {
 
           // zone.polygon should be a GeoJSON string, parse it
           const geojson = zone.boundary; // ✅ NO NEED to parse if backend already returns JSON
-
 
           // Draw the zone polygon with its color
           const zoneLayer = L.geoJSON(geojson, {

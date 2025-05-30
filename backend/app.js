@@ -1,23 +1,39 @@
+require('dotenv').config({ path: '.env' }); // Explicit path
 const express = require('express');
 const app = express();
-const cors =  require ('cors');
-require('dotenv').config();
-const userRoutes = require("./routes/userRoutes");
-const zoneRoutes = require("./routes/zoneRoutes"); 
-const client = require('./connectDB/connectDb');
+const cors = require('cors');
+
+
+
+// Initialize DB connection early
+const client = require('./connectDB/connectDb2');
+
+// CORS Configuration
 app.use(cors({
-    origin: 'http://localhost:5173',  // Replace with the URL of your React frontend
-    credentials: true,                // Allow credentials such as cookies
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization']  // Allow specific headers
+  origin: 'http://localhost:5173',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
-const PORT = 5000 || process.env.PORT;
-app.get("/", (req, res) =>{
-    res.send("hello world");
-})
-app.use('/user', userRoutes);
-app.use('/api/zones', zoneRoutes);  
-app.listen(PORT, (req, res) =>{
-    console.log(`Server running on port http://localhost:${PORT}`)
+
+// Routes
+app.use('/user', require("./routes/userRoutes"));
+app.use('/api/zones', require("./routes/zonesRoutes"));
+
+// Test endpoint
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port http://localhost:${PORT}`);
 });
