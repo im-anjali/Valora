@@ -3,10 +3,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-
-
-// Initialize DB connection early
-const client = require('./connectDB/connectDb2');
+// DB Connection (choose the right one)
+const client = require('./connectDB/connectDb'); // or connectDb2, depending on which you actually use
 
 // CORS Configuration
 app.use(cors({
@@ -19,8 +17,11 @@ app.use(cors({
 app.use(express.json());
 
 // Routes
-app.use('/user', require("./routes/userRoutes"));
-app.use('/api/zones', require("./routes/zonesRoutes"));
+const userRoutes = require("./routes/userRoutes");
+const zoneRoutes = require("./routes/zonesRoutes");
+
+app.use('/user', userRoutes);
+app.use('/api/zones', zoneRoutes);
 
 // Test endpoint
 app.get("/", (req, res) => {

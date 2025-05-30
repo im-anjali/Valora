@@ -1,4 +1,4 @@
-import ZoneMap from "../components/Zonemap"
+import ZoneMap from "../components/ZoneMap"
 
 export default function ZoneInfo(){
     return (
