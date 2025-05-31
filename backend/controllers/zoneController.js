@@ -1,6 +1,6 @@
-const client = require('../connectDB/connectDb2.js'); // PostgreSQL client connection
+const client = require('../connectDB/connectDb2.js'); 
 
-// Controller function to find zone by user location
+
 const findZoneByLocation = async (req, res) => {
   try {
     const { lat, lng } = req.body;
@@ -9,16 +9,7 @@ console.log('Received lat:', lat, 'lng:', lng);
       return res.status(400).json({ error: 'Invalid or missing latitude/longitude' });
     }
 
-   /* const query = `
-    SELECT zone, color, ST_AsGeoJSON(boundary_geom) AS boundary
-    FROM zones
-    WHERE ST_Contains(
-    boundary_geom,
-    ST_SetSRID(ST_MakePoint($1, $2), 4326)
-)
-LIMIT 1;
 
-    `;*/
    const query = `
   SELECT zone, color, ST_AsGeoJSON(boundary_geom) AS boundary
   FROM zones
@@ -29,10 +20,8 @@ LIMIT 1;
   LIMIT 1;
 `;
 
-
-
     const result = await client.query(query, [lng, lat]);
-console.log('Query result rows:', result.rows);
+    console.log('Query result rows:', result.rows);
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'No zone found for this location' });
     }
