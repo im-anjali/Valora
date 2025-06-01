@@ -1,5 +1,5 @@
 const express = require('express');
-const client = require('../connectDB/connectDb');
+const pool = require("../connectDB/connectDb")
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -8,7 +8,7 @@ require('dotenv').config();
 const login = async (req, res) =>{
     const {email, password} = req.body;
     try {
-        const result = await client.query('SELECT * FROM users WHERE email = $1', [email]);
+        const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         const user = result.rows[0];
         if(!user){
              return res.status(404).json({message:"user not found"});
@@ -42,12 +42,12 @@ const login = async (req, res) =>{
 const signup = async (req, res) =>{
     const {username, email, password, contact} = req.body;
     try {
-        const user = await client.query('SELECT * FROM users WHERE email = $1', [email])
+        const user = await pool.query('SELECT * FROM users WHERE email = $1', [email])
         if(user.rows.length > 0){
             return res.status(400).json({message:'user already exist'});
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await client.query(
+        const newUser = await pool.query(
             'INSERT INTO users (username, email, password, contact) VALUES ($1, $2, $3, $4)RETURNING * ',
             [username, email, hashedPassword, contact]
         );
@@ -59,7 +59,7 @@ const signup = async (req, res) =>{
 const profile = async(req, res) => {
     const userId = req.userId;
     try {
-        const details = await client.query('SELECT * FROM users WHERE id = $1', [userId]);
+        const details = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
         if(details.rows.length === 0){
             return res.status(404).json({
                 message:"user not found"
@@ -78,7 +78,7 @@ const updateProfile = async (req, res) => {
   const userId = req.userId;
 
   try {
-    const updateUser = await client.query(
+    const updateUser = await pool.query(
       'UPDATE users SET username = $1, email = $2, contact = $3 WHERE id = $4',
       [username, email, contact, userId]
     );
