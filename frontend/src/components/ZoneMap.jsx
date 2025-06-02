@@ -33,8 +33,7 @@ export default function ZoneMap() {
         const marker = L.marker(e.latlng).addTo(map);
         marker.bindPopup(`You are within ${Math.round(radius)} meters.`).openPopup();
 
-        // Optional circle to show accuracy radius
-        L.circle(e.latlng, radius).addTo(map);
+       
 
         markerRef.current = marker;
         map.setView(e.latlng, 15);
