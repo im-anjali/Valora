@@ -1,4 +1,4 @@
-// const client = require('../connectDB/connectDb2.js'); 
+const client = require('../connectDB/connectDb.js'); 
 
 
 const findZoneByLocation = async (req, res) => {

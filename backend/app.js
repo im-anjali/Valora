@@ -22,7 +22,7 @@ const zoneRoutes = require("./routes/zonesRoutes");
 
 app.use('/user', userRoutes);
 app.use('/api/zones', zoneRoutes);
-
+app.use('/police-stations',policeStationsRoutes);
 // Test endpoint
 app.get("/", (req, res) => {
   res.send("Server is running");
