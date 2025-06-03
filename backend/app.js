@@ -19,7 +19,7 @@ app.use(express.json());
 // Routes
 const userRoutes = require("./routes/userRoutes");
 const zoneRoutes = require("./routes/zonesRoutes");
-
+const policeStationsRoutes = require("./routes/policeStationsRoutes")
 app.use('/user', userRoutes);
 app.use('/api/zones', zoneRoutes);
 app.use('/police-stations',policeStationsRoutes);
