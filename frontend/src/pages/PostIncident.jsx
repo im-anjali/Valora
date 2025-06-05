@@ -4,11 +4,26 @@ import axios from "axios";
 function PostIncident() {
   const [incidents, setIncidents] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null); // for modal
-
+  const [PostIncident , setPostIncident] = useState(null)
+   const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription ] = useState("");
+  const [media, setMedia] = useState("")
   useEffect(() => {
     const fetchNotes = async () => {
+      const token = localStorage.getItem("token");
+      if(!token){
+        console.warn("no token found");
+        return;
+      }
       try {
-        const res = await axios(`${import.meta.env.VITE_BACKEND_URL}/post/getincident`);
+        const res = await axios(`${import.meta.env.VITE_BACKEND_URL}/post/getincident`, 
+          {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+        );
         setIncidents(res.data);
       } catch (error) {
         console.log(error);
@@ -16,10 +31,108 @@ function PostIncident() {
     };
     fetchNotes();
   }, []);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.warn("No token found");
+    return;
+  }
+
+  try {
+   const formData = new FormData();
+   formData.append("title", title);
+   formData.append("description", description);
+   if(media){
+    formData.append("media", media)
+   }
+    const res = await axios.post(
+      `${import.meta.env.VITE_BACKEND_URL}/post/postincident`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+          
+        },
+      }
+    );
+
+    setIsOpen(false);
+    setTitle("");
+    setDescription("");
+    setMedia(null);
+    window.location.reload(); 
+  } catch (error) {
+    console.error("POST error:", error.response?.data || error.message);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-white px-4 md:px-12 py-10 relative">
-      <h1 className="text-3xl font-bold text-purple-700 mb-8 text-center">Reported Incidents</h1>
+      <div className="flex justify-between items-center w-full mb-8">
+  <div className="flex-1 text-center">
+    <h1 className="text-3xl font-bold text-purple-700">Reported Incidents</h1>
+  </div>
+  <div className="flex-none">
+    <button  onClick={() => setIsOpen(true)} className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 cursor-pointer">
+     
+      Post an Incident
+    </button>
+  </div>
+</div>
+  {isOpen && (
+  <div
+    className="fixed inset-0  bg-opacity-50 backdrop-blur-lg flex items-center justify-center z-50"
+    onClick={() => setIsOpen(false)}
+  >
+    <div
+      className="bg-purple-100 p-7 rounded-2xl shadow-lg w-[90%] max-w-lg"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <form className="space-y-4">
+        <h1 className="text-center text-xl text-purple-800">Post an Incident</h1>
+
+        <input
+          type="text"
+          id="title"
+          placeholder="Enter title"
+          className="border p-3 w-full bg-white rounded"
+          onChange={(e) =>{setTitle(e.target.value)}}
+        />
+        <textarea
+          id="description"
+          placeholder="Enter Description"
+          className="border rounded w-full p-3 bg-white h-40 resize-none"
+          onChange={(e) => {setDescription(e.target.value)}}
+        ></textarea>
+        <input
+          type="file"
+            onChange={(e) => setMedia(e.target.files[0])}
+          className="file:bg-purple-600 p-3 file:text-white file:px-4 file:py-2 file:rounded-md file:border-none file:cursor-pointer hover:file:bg-purple-700 w-full bg-white rounded"
+        />
+
+        <div className="flex justify-end gap-2 pt-2">
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
       <div className="flex flex-col gap-6">
         {incidents.map((incident) => (
