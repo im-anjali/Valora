@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState({});
   const [loaded, setLoaded] = useState(false);
   const { currUser } = useContext(AuthContext);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -34,13 +34,18 @@ export default function ProfilePage() {
     };
     fetchDetails();
   }, []);
- const updatepage = () =>{
-   navigate("/updateuser")
- }
+  const updatepage = () => {
+    navigate("/updateuser")
+  }
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/")
+  }
   const avatarLetter = user.username?.charAt(0)?.toUpperCase() || "?";
 
   return (
     <>
+
       <style>{`
         @keyframes scaleUp10s {
           0% {
@@ -60,6 +65,7 @@ export default function ProfilePage() {
           }}
           className="w-11/12 sm:w-3/4 md:w-2/4 bg-white rounded-2xl shadow-xl overflow-hidden"
         >
+         
 
           <div className="h-[30%] bg-purple-300 flex items-center space-x-6 px-8 py-6">
             <div
@@ -68,6 +74,7 @@ export default function ProfilePage() {
                 transition-shadow duration-300 ease-in-out
                 cursor-default"
             >
+              
               {avatarLetter}
             </div>
             <div>
@@ -82,7 +89,10 @@ export default function ProfilePage() {
             >
               <Pencil size={18} />
               <span className="text-sm font-medium" >Edit</span>
+
             </button>
+            <button onClick={logout} className=" bg-white hover:bg-purple-100 cursor-pointer text-purple-600 border border-purple-400 px-4 py-2 rounded-half flex items-center gap-2 transition duration-300 ease-in-out shadow-sm"
+            >logout</button>
           </div>
 
 
