@@ -21,6 +21,9 @@ export default function Navbar() {
     localStorage.removeItem("token");
     navigate("/login")
   }
+  const navigateProfile = () =>{
+    navigate("/profile");
+  }
 
   return (
     <Disclosure as="nav" className="bg-[#b5b5f0]">
@@ -74,7 +77,7 @@ export default function Navbar() {
             {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">
               <div>
-                <MenuButton className="relative flex cursor-pointer rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+                <MenuButton onClick={navigateProfile} className="relative flex cursor-pointer rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                  
@@ -82,7 +85,7 @@ export default function Navbar() {
                   <FaUserAlt  className='text-4xl p-2 'fill='white' />
                 </MenuButton>
               </div>
-              <MenuItems
+              {/* <MenuItems
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
@@ -111,7 +114,7 @@ export default function Navbar() {
                     Sign out
                   </a>
                 </MenuItem>
-              </MenuItems>
+              </MenuItems> */}
             </Menu>
           </div>
         </div>
