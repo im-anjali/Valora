@@ -4,23 +4,30 @@ const fs = require("fs");
 
 const createIncident = async (req, res) => {
   const { title, description } = req.body;
+  const mediaFile = req.files?.media || null;
 
-  const mediaFile = req.files?.media;
-
-  if (!title || !description || !mediaFile) {
-    return res.status(400).json({ message: "Title, description, and media are required." });
+  if (!title || !description) {
+    return res.status(400).json({ message: "Title and description are required." });
   }
 
-  const uploadDir = path.join(__dirname, "../uploads");
-  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+  let fileName = null;
 
-  const fileName = Date.now() + "-" + mediaFile.name;
-  const filePath = path.join(uploadDir, fileName);
+  if (mediaFile) {
+    const uploadDir = path.join(__dirname, "../uploads");
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+
+    fileName = Date.now() + "-" + mediaFile.name;
+    const filePath = path.join(uploadDir, fileName);
+
+    try {
+      await mediaFile.mv(filePath);
+    } catch (err) {
+      console.error("Media upload failed:", err);
+      return res.status(500).send("Media upload error");
+    }
+  }
 
   try {
-    await mediaFile.mv(filePath); 
-
-   
     const result = await pool.query(
       "INSERT INTO incidents (title, description, media) VALUES ($1, $2, $3) RETURNING *",
       [title, description, fileName]
@@ -32,6 +39,7 @@ const createIncident = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
 
 const getIncidents = async (req, res) => {
   try {
