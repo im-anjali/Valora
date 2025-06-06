@@ -4,7 +4,7 @@ const client = require('../connectDB/connectDb.js');
 const findZoneByLocation = async (req, res) => {
   try {
     const { lat, lng } = req.body;
-console.log('Received lat:', lat, 'lng:', lng);
+    console.log('Received lat:', lat, 'lng:', lng);
     if (typeof lat !== 'number' || typeof lng !== 'number') {
       return res.status(400).json({ error: 'Invalid or missing latitude/longitude' });
     }
