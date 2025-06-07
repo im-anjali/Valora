@@ -35,21 +35,39 @@ export default function NearHosp() {
         .bindPopup("You are here")
         .openPopup();
 
-      const mockHospitals = [
-        { name: "Ruby Hall Clinic", lat: lat + 0.01, lng: lng + 0.01, distance: 1.2 },
-        { name: "Sancheti Hospital", lat: lat - 0.008, lng: lng - 0.005, distance: 1.8 },
-        { name: "Deenanath Mangeshkar Hospital", lat: lat + 0.004, lng: lng - 0.007, distance: 2.5 },
-      ];
+      try {
+        const response = await fetch("http://localhost:5000/api/hospital/findHospi", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lat, lng }),
+        });
 
-      setHospitals(mockHospitals);
+        if (!response.ok) throw new Error("Failed to fetch hospitals");
 
-      mockHospitals.forEach((h) => {
-        const marker = L.marker([h.lat, h.lng], { icon: hospitalIcon })
-          .addTo(map)
-          .bindPopup(`${h.name}`);
+        const data = await response.json();
 
-        markersref.current[h.name] = marker;
-      });
+        const formattedHospitals = data.map(h => ({
+          name: h.name,
+          lat: h.lat,
+          lng: h.lng,
+          distance: (h.distance_meters / 1000).toFixed(2), // km
+          address: h.address,
+          contact: h.contact,
+        }));
+
+        setHospitals(formattedHospitals);
+
+        formattedHospitals.forEach(h => {
+          const marker = L.marker([h.lat, h.lng], { icon: hospitalIcon })
+            .addTo(map)
+            .bindPopup(`${h.name}<br/>${h.address}<br/>${h.contact}`);
+
+          markersref.current[h.name] = marker;
+        });
+      } catch (error) {
+        console.error("Error fetching hospitals:", error);
+        alert("Could not load hospitals data.");
+      }
     };
 
     map.on("locationfound", onLocationFound);
@@ -72,7 +90,7 @@ export default function NearHosp() {
         marginRight: "0.5rem",
       }}
     >
-      {/* Map container - Left side */}
+      {/* Map container */}
       <div
         id="map"
         style={{
@@ -84,7 +102,7 @@ export default function NearHosp() {
         }}
       ></div>
 
-      {/* Right side panel */}
+      {/* Sidebar */}
       <div
         style={{
           width: "38%",
@@ -138,18 +156,24 @@ export default function NearHosp() {
         <div
           style={{
             flexGrow: 1,
-            background: "#E6E6FA", // Light lavender
+            background: "#E6E6FA",
             borderRadius: "12px",
-            border:"2px solid #b5b5f0",
+            border: "2px solid #b5b5f0",
             padding: "20px",
             boxShadow: "0 6px 15px rgba(100, 100, 100, 0.3)",
             overflowY: "auto",
           }}
         >
-          <h3 style={{ marginBottom: "15px", color: "#333", fontWeight:"bold" }}>Hospitals Near You:</h3>
+          <h3
+            style={{ marginBottom: "15px", color: "#333", fontWeight: "bold" }}
+          >
+            Hospitals Near You:
+          </h3>
           <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
             {hospitals
-              .filter((h) => h.name.toLowerCase().includes(searchQuery.toLowerCase()))
+              .filter((h) =>
+                h.name.toLowerCase().includes(searchQuery.toLowerCase())
+              )
               .map((h, i) => (
                 <li
                   key={i}
@@ -157,9 +181,9 @@ export default function NearHosp() {
                     marginBottom: "15px",
                     padding: "10px",
                     border: "2px solid #b5b5f0",
-                    borderRadius:"0.7rem",
+                    borderRadius: "0.7rem",
                     cursor: "pointer",
-                    background:"white",
+                    background: "white",
                   }}
                   onClick={() => {
                     const marker = markersref.current[h.name];
