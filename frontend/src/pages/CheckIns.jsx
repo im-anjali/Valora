@@ -1,4 +1,5 @@
-// twilio code: 46G5PCFHA1YVKP46VSTM4YNP
+import { useState } from "react";
+
 export default function CheckIns() {
   const contacts = [
     {
@@ -10,25 +11,42 @@ export default function CheckIns() {
       phone: 9822850039,
     },
     {
-        name: "Anjali",
-        phone: 7558366814,
-    }
+      name: "Anjali",
+      phone: 7558366814,
+    },
   ];
+
+  const [selected, setSelected] = useState([]);
+
+  const handleCheckboxChange = (phone) => {
+    setSelected((prevSelected) =>
+      prevSelected.includes(phone)
+        ? prevSelected.filter((p) => p !== phone)
+        : [...prevSelected, phone]
+    );
+  };
+
+  const handleSendCheckIn = () => {
+    if (selected.length === 0) {
+      alert("Please select at least one contact.");
+    } else {
+      //integrate Twilio API call logic later
+      alert("Check-in sent successfully!");
+    }
+  };
 
   return (
     <div
       style={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
-        height: "100vh", // Full viewport height
-        width: "100vw",  // Full viewport width
+        marginTop: "1.5rem",
+        paddingBottom: "2rem",
       }}
     >
       <div
         style={{
           width: "60%",
-          marginTop:"2rem",
           background: "#E6E6FA", // Light lavender
           borderRadius: "12px",
           border: "2px solid #b5b5f0",
@@ -37,7 +55,6 @@ export default function CheckIns() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height:"auto",
         }}
       >
         <h3
@@ -76,10 +93,28 @@ export default function CheckIns() {
                 <h2 style={{ margin: 0 }}>{person.name}</h2>
                 <p style={{ margin: 0 }}>{person.phone}</p>
               </div>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                onChange={() => handleCheckboxChange(person.phone)}
+              />
             </li>
           ))}
         </ul>
+        <button
+          onClick={handleSendCheckIn}
+          style={{
+            marginTop: "1.5rem",
+            padding: "10px 20px",
+            fontSize: "16px",
+            backgroundColor: "#6a5acd",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          Send Check-In
+        </button>
       </div>
     </div>
   );
