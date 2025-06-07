@@ -17,6 +17,7 @@ import NearHosp from "./pages/NearHosp";
 import NearPolice from "./components/NearPolice";
 import CheckIns from "./pages/CheckIns";
 import PostIncident from "./pages/PostIncident";
+import Sos from "./components/Sos";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/policestation" element={<NearPolice/>} />
         <Route path="/checkins" element={<CheckIns/>} />
         <Route path="/posts" element={<PostIncident/>}/>
+        <Route path="/sos" element={<Sos/>} />
       </Routes>
       <PanicButton/>
     </>
