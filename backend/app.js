@@ -28,12 +28,12 @@ const userRoutes = require("./routes/userRoutes");
 const zoneRoutes = require("./routes/zonesRoutes");
 const policeStationsRoutes = require("./routes/policeStationsRoutes");
 const postRoutes = require("./routes/incidentRoutes");
-
+const hospitalRoutes = require("./routes/hospitalRoutes");
 app.use('/user', userRoutes);
 app.use('/api/zones', zoneRoutes);
-app.use('/police-stations', policeStationsRoutes);
+app.use('/api/police', policeStationsRoutes);
 app.use("/post", postRoutes);
-
+app.use("/api/hospital", hospitalRoutes);
 // Test endpoint
 app.get("/", (req, res) => {
   res.send("Server is running");
