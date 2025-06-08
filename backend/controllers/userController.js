@@ -40,23 +40,25 @@ const login = async (req, res) =>{
     }
 }
 
-const signup = async (req, res) =>{
-    const {username, email, password, contact} = req.body;
-    try {
-        const user = await pool.query('SELECT * FROM users WHERE email = $1', [email])
-        if(user.rows.length > 0){
-            return res.status(400).json({message:'user already exist'});
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = await pool.query(
-            'INSERT INTO users (username, email, password, contact) VALUES ($1, $2, $3, $4)RETURNING * ',
-            [username, email, hashedPassword, contact]
-        );
-            res.status(201).json({ message: 'User created successfully', user: newUser.rows[0] });
-    } catch (error) {
-          res.status(500).json({ error: error.message });
+const signup = async (req, res) => {
+  const { username, email, password, contact, emergency_contact1, emergency_contact2 } = req.body;
+  try {
+    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if(user.rows.length > 0){
+      return res.status(400).json({message:'user already exist'});
     }
-}
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await pool.query(
+      `INSERT INTO users (username, email, password, contact, emergency_contact1, emergency_contact2) 
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [username, email, hashedPassword, contact, emergency_contact1, emergency_contact2]
+    );
+    res.status(201).json({ message: 'User created successfully', user: newUser.rows[0] });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const profile = async(req, res) => {
     const userId = req.userId;
     try {

@@ -8,34 +8,39 @@ const Signup = () => {
     const [error, setError] = useState('');
     const [contact, setContact] = useState('');
     const [loading, setLoading] = useState(false); // Added missing loading state
+    const [emergencyContact1, setEmergencyContact1] = useState('');
+    const [emergencyContact2, setEmergencyContact2] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true); // Set loading to true when starting
         setError(''); // Clear previous errors
-        
+
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    username: username.trim(),
-                    email: email.trim(),
-                    password,
-                    contact: contact.trim()
-                })
+               body: JSON.stringify({
+  username: username.trim(),
+  email: email.trim(),
+  password,
+  contact: contact.trim(),
+  emergency_contact1: emergencyContact1.trim(),
+  emergency_contact2: emergencyContact2.trim()
+})
+
             });
-            
+
             const data = await response.json();
             console.log("Fetch response:", data);
-            
+
             if (!response.ok) {
                 throw new Error(data.message || 'Signup failed');
             }
-            
+
             navigate("/");
         } catch (error) {
             console.error("Fetch error:", error);
@@ -62,13 +67,13 @@ const Signup = () => {
                             Sign Up
                         </h3>
                     </div>
-                    
+
                     {error && (
                         <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
                             {error}
                         </div>
                     )}
-                    
+
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div className="space-y-2">
                             <label
@@ -88,7 +93,7 @@ const Signup = () => {
                                     required
                                 />
                             </div>
-                            
+
                             <label
                                 htmlFor="email"
                                 className="block text-sm font-medium text-gray-800"
@@ -106,7 +111,7 @@ const Signup = () => {
                                     required
                                 />
                             </div>
-                            
+
                             <div className="space-y-2">
                                 <div className="flex justify-between items-center">
                                     <label
@@ -127,7 +132,37 @@ const Signup = () => {
                                         required
                                     />
                                 </div>
-                                
+
+                                <label
+                                    htmlFor="emergencyContact1"
+                                    className="block text-sm font-medium text-gray-800 mt-4"
+                                >
+                                    Emergency Contact 1
+                                </label>
+                                <input
+                                    id="emergencyContact1"
+                                    type="tel"
+                                    value={emergencyContact1}
+                                    onChange={(e) => setEmergencyContact1(e.target.value)}
+                                    placeholder="Enter Emergency Contact 1"
+                                    className="w-full pl-3 pr-10 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                    required
+                                />
+
+                                <label
+                                    htmlFor="emergencyContact2"
+                                    className="block text-sm font-medium text-gray-800 mt-4"
+                                >
+                                    Emergency Contact 2
+                                </label>
+                                <input
+                                    id="emergencyContact2"
+                                    type="tel"
+                                    value={emergencyContact2}
+                                    onChange={(e) => setEmergencyContact2(e.target.value)}
+                                    placeholder="Enter Emergency Contact 2"
+                                    className="w-full pl-3 pr-10 py-3 text-black bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-black"
+                                />
                                 <div className="flex justify-between items-center">
                                     <label
                                         htmlFor="password"
