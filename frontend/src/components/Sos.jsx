@@ -14,9 +14,9 @@ export default function Sos() {
   const routingControlRef = useRef(null);
 
   const contacts = [
-    { name: "Noopur Karkare", phone: 9763718189 },
-    { name: "Sejal Pathak", phone: 9822850039 },
-    { name: "Anjali Phule", phone: 7558366814 },
+    { name: "Noopur Karkare", phone: "+919763718189" },
+    { name: "Sejal Pathak", phone: "+919022958279" },
+    { name: "Anjali Phule", phone: "+917558366814" },
   ];
 
   const [policeStation, setPoliceStation] = useState(null);
@@ -29,7 +29,7 @@ export default function Sos() {
     }
 
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
         const loc = {
           lat: position.coords.latitude,
           lng: position.coords.longitude,
@@ -49,6 +49,22 @@ export default function Sos() {
         );
         setLocationError(null);
 
+        // Notify contacts via backend
+        const message = `🚨 EMERGENCY! I need help.\nMy location: https://maps.google.com/?q=${loc.lat},${loc.lng}`;
+      try {
+        await fetch("http://localhost:5000/api/send-sms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+          numbers: contacts.map((c) => c.phone),
+          message: message,
+        }),
+      });
+      } catch (err) {
+        console.error("❌ Failed to send SOS message:", err);
+      }
+
+        // Clean old map
         if (mapRef.current) {
           mapRef.current.remove();
           policeMarkerRef.current = null;
@@ -68,13 +84,12 @@ export default function Sos() {
           .bindPopup("You are here")
           .openPopup();
 
-        // Add police marker and route once station is defined
+        // Police marker and route
         if (dummyPolice) {
           policeMarkerRef.current = L.marker([dummyPolice.lat, dummyPolice.lng])
             .addTo(map)
             .bindPopup(`${dummyPolice.name} notified with your location`);
 
-          // Routing from user to police station
           routingControlRef.current = L.Routing.control({
             waypoints: [
               L.latLng(loc.lat, loc.lng),
@@ -95,14 +110,7 @@ export default function Sos() {
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "90vh",
-        padding: "1rem",
-        gap: "1rem",
-      }}
-    >
+    <div style={{ display: "flex", height: "90vh", padding: "1rem", gap: "1rem" }}>
       <div
         style={{
           flexBasis: "40%",
@@ -135,14 +143,7 @@ export default function Sos() {
           </p>
         )}
 
-        <ul
-          style={{
-            listStyle: "none",
-            paddingLeft: 0,
-            margin: 0,
-            width: "100%",
-          }}
-        >
+        <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0, width: "100%" }}>
           {contacts.map((person, i) => (
             <li
               key={i}
