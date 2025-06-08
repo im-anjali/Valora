@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const login = async (req, res) =>{
     const {email, password} = req.body;
+    console.log("Login request received:", { email, password });
     try {
         const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         const user = result.rows[0];
@@ -29,7 +30,7 @@ const login = async (req, res) =>{
                 token,
                 data: {
                     id: user.id,
-                    username: user.name,
+                    username: user.username,
                     email: user.email
                 }
             });

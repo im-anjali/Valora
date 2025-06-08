@@ -6,7 +6,7 @@ export default function NearPolice() {
   const mapRef = useRef(null);
   const markersref = useRef({});
   const [userLocation, setUserLocation] = useState(null);
-  const [hospitals, setHospitals] = useState([]);
+  const [stations, setStations] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -23,33 +23,45 @@ export default function NearPolice() {
       const { lat, lng } = e.latlng;
       setUserLocation({ lat, lng });
 
-      const hospitalIcon = L.icon({
-        iconUrl: "/policeMarker.png",
-        iconSize: [35, 35],
-        iconAnchor: [15, 30],
-        popupAnchor: [0, -28],
-      });
-
       L.marker([lat, lng])
         .addTo(map)
         .bindPopup("You are here")
         .openPopup();
 
-      const mockHospitals = [
-        { name: "Ruby Hall police station", lat: lat + 0.01, lng: lng + 0.01, distance: 1.2 },
-        { name: "Sancheti police station", lat: lat - 0.008, lng: lng - 0.005, distance: 1.8 },
-        { name: "Deenanath police station", lat: lat + 0.004, lng: lng - 0.007, distance: 2.5 },
-      ];
+      try {
+        const response = await fetch("http://localhost:5000/api/police/find-nearby", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ lat, lng }),
+        });
 
-      setHospitals(mockHospitals);
+        if (!response.ok) throw new Error("Failed to fetch nearby stations");
 
-      mockHospitals.forEach((h) => {
-        const marker = L.marker([h.lat, h.lng], { icon: hospitalIcon })
-          .addTo(map)
-          .bindPopup(`${h.name}`);
+        const data = await response.json();
+        setStations(data);
 
-        markersref.current[h.name] = marker;
-      });
+        const policeIcon = L.icon({
+          iconUrl: "/policeMarker.png",
+          iconSize: [35, 35],
+          iconAnchor: [15, 30],
+          popupAnchor: [0, -28],
+        });
+
+        data.forEach((station) => {
+          const marker = L.marker([station.latitude, station.longitude], {
+            icon: policeIcon,
+          })
+            .addTo(map)
+            .bindPopup(`${station.name} (${(station.distance_meters / 1000).toFixed(2)} km)`);
+
+          markersref.current[station.name] = marker;
+        });
+      } catch (error) {
+        console.error("Error fetching police stations:", error);
+        alert("Could not load police stations.");
+      }
     };
 
     map.on("locationfound", onLocationFound);
@@ -72,7 +84,7 @@ export default function NearPolice() {
         marginRight: "0.5rem",
       }}
     >
-      {/* Map container - Left side */}
+      {/* Map container */}
       <div
         id="map"
         style={{
@@ -84,7 +96,7 @@ export default function NearPolice() {
         }}
       ></div>
 
-      {/* Right side panel */}
+      {/* Sidebar */}
       <div
         style={{
           width: "38%",
@@ -134,44 +146,48 @@ export default function NearPolice() {
           }}
         />
 
-        {/* Police Near You List */}
+        {/* Nearby Stations List */}
         <div
           style={{
             flexGrow: 1,
-            background: "#E6E6FA", // Light lavender
+            background: "#E6E6FA",
             borderRadius: "12px",
-            border:"2px solid #b5b5f0",
+            border: "2px solid #b5b5f0",
             padding: "20px",
             boxShadow: "0 6px 15px rgba(100, 100, 100, 0.3)",
             overflowY: "auto",
           }}
         >
-          <h3 style={{ marginBottom: "15px", color: "#333", fontWeight:"bold" }}>Police Stations Near You:</h3>
+          <h3 style={{ marginBottom: "15px", color: "#333", fontWeight: "bold" }}>
+            Police Stations Near You:
+          </h3>
           <ul style={{ listStyle: "none", paddingLeft: 0, margin: 0 }}>
-            {hospitals
-              .filter((h) => h.name.toLowerCase().includes(searchQuery.toLowerCase()))
-              .map((h, i) => (
+            {stations
+              .filter((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
+              .map((s, i) => (
                 <li
                   key={i}
                   style={{
                     marginBottom: "15px",
                     padding: "10px",
                     border: "2px solid #b5b5f0",
-                    borderRadius:"0.7rem",
+                    borderRadius: "0.7rem",
                     cursor: "pointer",
-                    background:"white",
+                    background: "white",
                   }}
                   onClick={() => {
-                    const marker = markersref.current[h.name];
+                    const marker = markersref.current[s.name];
                     if (marker) {
                       marker.openPopup();
                       mapRef.current.setView(marker.getLatLng(), 16);
                     }
                   }}
                 >
-                  <b>{h.name}</b>
+                  <b>{s.name}</b>
                   <br />
-                  📍 {h.distance} km away
+                  📍 {(s.distance_meters / 1000).toFixed(2)} km away
+                  <br />
+                  ☎️ {s.contact}
                 </li>
               ))}
           </ul>
@@ -180,3 +196,4 @@ export default function NearPolice() {
     </div>
   );
 }
+

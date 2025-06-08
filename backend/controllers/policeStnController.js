@@ -2,30 +2,19 @@ const client = require("../connectDB/connectDb");
 
 const findPolicestn = async (req, res) => {
   try {
-    const { lat, lng } = req.body;
+    const { lat, lng } = req.body || req.query;
 
-    if (typeof lat !== 'number' || typeof lng !== 'number') {
-      return res.status(400).json({ error: 'Invalid or missing latitude/longitude' });
+    console.log("Incoming coordinates:", lat, lng);
+
+    if (!lat || !lng) {
+      return res.status(400).json({ error: "Missing coordinates" });
     }
 
     const query = `
-      SELECT
-        name,
-        address,
-        latitude,
-        longitude,
-        contact,
-        ST_Distance(
-          location,
-          ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
-        ) AS distance_meters
-      FROM police_stations
-      WHERE ST_DWithin(
-        location,
-        ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
-        3000
-      )
-      ORDER BY distance_meters
+      SELECT *, 
+        ST_Distance(location, ST_MakePoint($1, $2)::geography) AS distance_meters 
+      FROM police_stations 
+      ORDER BY distance_meters 
       LIMIT 5;
     `;
 
@@ -35,10 +24,11 @@ const findPolicestn = async (req, res) => {
       return res.status(404).json({ message: "No nearby police stations found" });
     }
 
+    console.log("Nearby stations:", result.rows);
     res.json(result.rows);
   } catch (error) {
-    console.error('Error finding police stations:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error finding police stations:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
