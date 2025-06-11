@@ -18,7 +18,7 @@ import NearPolice from "./components/NearPolice";
 import CheckIns from "./pages/CheckIns";
 import PostIncident from "./pages/PostIncident";
 import Sos from "./components/Sos";
-
+import PrivateRoute from "./pages/PrivateRoute";
 export default function App() {
   const location = useLocation();
   const isAuthPage = location.pathname === "/" || location.pathname === "/signup";
@@ -26,19 +26,19 @@ export default function App() {
     <>
        {!isAuthPage && <Navbar />}
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/aboutUs" element={<AboutUs />} />
+        <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path="/aboutUs" element={<AboutUs />}/>
         <Route path="/" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/signup" element={<Signup/>} />
+        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/updateuser" element={<UpdateUser />} />
-        <Route path="/zoneinfo" element={<ZoneInfo />} />
-        <Route path="/saferoute" element={<SafeRoute />} />
-        <Route path="/hospital" element={<NearHosp/>} />
-        <Route path="/policestation" element={<NearPolice/>} />
-        <Route path="/checkins" element={<CheckIns/>} />
+        <Route path="/zoneinfo" element={<PrivateRoute><ZoneInfo /></PrivateRoute>} />
+        <Route path="/saferoute" element={<PrivateRoute><SafeRoute /></PrivateRoute>} />
+        <Route path="/hospital" element={<PrivateRoute><NearHosp/></PrivateRoute>} />
+        <Route path="/policestation" element={<PrivateRoute><NearPolice/></PrivateRoute>} />
+        <Route path="/checkins" element={<PrivateRoute><CheckIns/></PrivateRoute>} />
         <Route path="/posts" element={<PostIncident/>}/>
-        <Route path="/sos" element={<Sos/>} />
+        <Route path="/sos" element={<PrivateRoute><Sos/></PrivateRoute>} />
       </Routes>
       {!isAuthPage && <PanicButton />}
     </>

@@ -18,6 +18,7 @@ export default function ProfilePage() {
       const token = localStorage.getItem("token");
       if (!token) {
         console.warn("No token found");
+       
         return;
       }
       try {
@@ -42,10 +43,10 @@ export default function ProfilePage() {
     navigate("/")
   }
   const avatarLetter = user.username?.charAt(0)?.toUpperCase() || "?";
+   
 
   return (
-    <>
-
+    <> 
      
       <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
         <div
