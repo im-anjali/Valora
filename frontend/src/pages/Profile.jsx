@@ -46,19 +46,8 @@ export default function ProfilePage() {
   return (
     <>
 
-      <style>{`
-        @keyframes scaleUp10s {
-          0% {
-            transform: scale(0.8);
-            opacity: 0;
-          }
-          100% {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-      `}</style>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+     
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 ">
         <div
           style={{
             animation: loaded ? 'scaleUp10s 1s forwards ease-in-out' : 'none',

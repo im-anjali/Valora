@@ -5,7 +5,7 @@ import "./index.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-control-geocoder/dist/Control.Geocoder.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
@@ -20,13 +20,15 @@ import PostIncident from "./pages/PostIncident";
 import Sos from "./components/Sos";
 
 export default function App() {
+  const location = useLocation();
+  const isAuthPage = location.pathname === "/" || location.pathname === "/signup";
   return (
     <>
-      <Navbar />
+       {!isAuthPage && <Navbar />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/aboutUs" element={<AboutUs />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/updateuser" element={<UpdateUser />} />
@@ -38,7 +40,7 @@ export default function App() {
         <Route path="/posts" element={<PostIncident/>}/>
         <Route path="/sos" element={<Sos/>} />
       </Routes>
-      <PanicButton/>
+      {!isAuthPage && <PanicButton />}
     </>
   );
 }

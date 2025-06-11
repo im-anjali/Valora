@@ -14,23 +14,24 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true); // Set loading to true when starting
-        setError(''); // Clear previous errors
+        setLoading(true); 
+        setError(''); 
 
         try {
             const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, {
                 method: 'POST',
                 headers: {
+
                     'Content-Type': 'application/json',
                 },
-               body: JSON.stringify({
-  username: username.trim(),
-  email: email.trim(),
-  password,
-  contact: contact.trim(),
-  emergency_contact1: emergencyContact1.trim(),
-  emergency_contact2: emergencyContact2.trim()
-})
+                body: JSON.stringify({
+                    username: username.trim(),
+                    email: email.trim(),
+                    password,
+                    contact: contact.trim(),
+                    emergency_contact1: emergencyContact1.trim(),
+                    emergency_contact2: emergencyContact2.trim()
+                })
 
             });
 
@@ -40,8 +41,9 @@ const Signup = () => {
             if (!response.ok) {
                 throw new Error(data.message || 'Signup failed');
             }
-
-            navigate("/");
+           
+            navigate("/home");
+          localStorage.setItem('token', data.token);
         } catch (error) {
             console.error("Fetch error:", error);
             setError(error.message);
@@ -199,7 +201,7 @@ const Signup = () => {
                             <p className="text-gray-800">
                                 Already have an account?{" "}
                                 <Link
-                                    to="/login"
+                                    to="/"
                                     className="text-black hover:text-gray-600 font-medium"
                                 >
                                     Sign in
