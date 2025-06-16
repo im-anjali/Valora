@@ -15,7 +15,7 @@ function classNames(...classes) {
 export default function Navbar() {
     const navigate = useNavigate();
     const navigateHome = () =>{
-        navigate("/");
+        navigate("/home");
 }
   const logout = () =>{
     localStorage.removeItem("token");
