@@ -2,7 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useNavigate } from 'react-router'
 import { FaUserAlt } from "react-icons/fa";const navigation = [
-  { name: 'Home', href: '/', current: true },
+  { name: 'Home', href: '/home', current: true },
   { name: 'About Us', href: '/aboutus', current: false },
   { name: 'Recent Posts', href: '/posts', current: false },
 ]
@@ -15,7 +15,7 @@ function classNames(...classes) {
 export default function Navbar() {
     const navigate = useNavigate();
     const navigateHome = () =>{
-        navigate("/");
+        navigate("/home");
 }
   const logout = () =>{
     localStorage.removeItem("token");
@@ -54,7 +54,7 @@ export default function Navbar() {
                     href={item.href}
                     aria-current={item.current ? 'page' : undefined}
                     className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-black ',
+                      item.current ? 'text' : 'text-black ',
                       'rounded-md px-3 py-2 text-sm font-medium',
                     )}
                   >
