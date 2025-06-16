@@ -4,7 +4,6 @@ const client = require('../connectDB/connectDb.js');
 const findZoneByLocation = async (req, res) => {
   try {
     const { lat, lng } = req.body;
-    console.log('Received lat:', lat, 'lng:', lng);
     if (typeof lat !== 'number' || typeof lng !== 'number') {
       return res.status(400).json({ error: 'Invalid or missing latitude/longitude' });
     }
@@ -21,12 +20,10 @@ const findZoneByLocation = async (req, res) => {
 `;
 
     const result = await client.query(query, [lng, lat]);
-    console.log('Query result rows:', result.rows);
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'No zone found for this location' });
     }
 
-    // Parse boundary GeoJSON string into object
     const zone = result.rows[0];
     zone.boundary = JSON.parse(zone.boundary);
 
