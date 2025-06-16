@@ -1,6 +1,6 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router'
+import { useNavigate, Link } from 'react-router'
 import { FaUserAlt } from "react-icons/fa";const navigation = [
   { name: 'Home', href: '/home', current: true },
   { name: 'About Us', href: '/aboutus', current: false },
@@ -49,17 +49,17 @@ export default function Navbar() {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
+                    to={item.href}
                     aria-current={item.current ? 'page' : undefined}
                     className={classNames(
                       item.current ? 'text' : 'text-black ',
-                      'rounded-md px-3 py-2 text-sm font-medium',
+                      'rounded-md px-3 py-2 text-sm font-medium'
                     )}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
