@@ -107,10 +107,10 @@ Valora prioritizes user security through multiple layers of protection:
 
 This project was developed by a dedicated team of developers committed to women's safety:
 
-- **Noopur Karkare** - Full Stack Developer
-- **Anjali Phule** - Full Stack Developer  
-- **Sejal Pathak** - Full Stack Developer
-
+- **Noopur Karkare** - [GitHub](https://github.com/noopur1811)
+- **Anjali Phule** - [GitHub](https://github.com/im-anjali)
+- **Sejal Pathak** - [GitHub](https://github.com/sej197)
+  
 ## Contributing
 
 We welcome contributions to improve Valora's functionality and reach. Please feel free to submit issues, feature requests, or pull requests to help make our communities safer.
