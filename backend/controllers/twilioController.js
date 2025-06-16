@@ -4,12 +4,11 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 const twilioNumber = process.env.TWILIO_PHONE_NUMBER;
-console.log("twilioController.js loaded");
+
 
 
 
 const sendSms = async (req, res) => {
-  console.log(" sendSms controller called");
 
   try {
     const { numbers, message } = req.body;
@@ -28,7 +27,6 @@ const sendSms = async (req, res) => {
           from: twilioNumber,
           to: number,
         });
-        console.log(`SMS sent to ${number} - SID: ${sms.sid}`);
         results.push({ to: number, sid: sms.sid, success: true });
       } catch (err) {
         console.error(` Failed to send SMS to ${number}:`, err.message);
