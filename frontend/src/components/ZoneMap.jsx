@@ -44,7 +44,7 @@ export default function ZoneMap() {
           lng: e.latlng.lng,
         });
 
-        // 👉 Call backend to get zone by lat/lng
+        //  Call backend to get zone by lat/lng
         try {
           const response = await fetch("http://localhost:5000/api/zones/find-zone", {
             method: "POST",
