@@ -5,7 +5,7 @@ Valora is a comprehensive women's safety application designed specifically for t
 ## Features
 
 ### 1. Safe Route Navigation
-Find the safest route from your current location to any destination within Pune. The application analyzes safety data and suggests optimal paths that prioritize security over speed.
+Find the safest route from your current location to any destination within Pune. 
 
 ### 2. Zone Safety Information
 - **Green Zone**: Safest areas with high security presence and well-lit environments
